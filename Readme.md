@@ -8,6 +8,9 @@ AWS Demo using S3, API Gateway, NodeJS, Lambda and DynamoDB
 This demo shows how to host a Dynamic Web Site on static AWS Simple Storage Service (S3) using jQuery .getJSON function to call API Gateway.
 The API Gateway uses Lambda functions written on node.js to store feedback in DynamoDB.
 
+- No Servers to build
+- No Build or Build Pipeline
+
 Author
 ------ 
 Keith Johnson
@@ -19,6 +22,12 @@ http://demo-feedback.s3-website-eu-west-1.amazonaws.com/
 Status
 ------
 In Progress
+
+To Do
+-----
+1. Create AWS CloudFormation template to create and deploy application automatically.
+
+2. Write up project from Notes below but using CloudFormation instead of AWS Console.
 
 Notes (Below are Notes still to be written up)
 ----------------------------------------------
