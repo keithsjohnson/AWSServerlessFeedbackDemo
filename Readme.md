@@ -109,3 +109,7 @@ S3 Files
 --------
 /html/index.html
 
+Reference
+---------
+AWS Labs Project
+https://github.com/keithsjohnson/lambda-refarch-webapp
