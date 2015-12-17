@@ -1,0 +1,4 @@
+{ 
+    "feedback": "$input.params('feedback')",
+    "score": "$input.params('score')"
+}
