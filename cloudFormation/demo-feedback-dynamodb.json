@@ -1,0 +1,101 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+
+  "Description" : "AWS CloudFormation Template for demo-feedback: Builds DynamoDB tables.",
+
+  "Parameters": {
+
+    "FeedbackTableRead": {
+        "Description": "Read capacity units for Feedback DynamoDB table",
+        "Type": "String",
+        "MinLength": "1",
+        "MaxLength": "4",
+        "AllowedPattern": "[0-9]*",
+        "Default": "1"
+    },
+
+    "FeedbackTableWrite": {
+        "Description": "Write capacity units for Feedback DynamoDB table",
+        "Type": "String",
+        "MinLength": "1",
+        "MaxLength": "4",
+        "AllowedPattern": "[0-9]*",
+        "Default": "1"
+    },
+
+    "AggregatesTableRead": {
+        "Description": "Read capacity units for FeedbackAggregates aggregates table",
+        "Type": "String",
+        "MinLength": "1",
+        "MaxLength": "4",
+        "AllowedPattern": "[0-9]*",
+        "Default": "1"
+    },
+
+    "AggregatesTableWrite": {
+        "Description": "Write capacity units for FeedbackAggregates aggregates table",
+        "Type": "String",
+        "MinLength": "1",
+        "MaxLength": "4",
+        "AllowedPattern": "[0-9]*",
+        "Default": "1"
+    }
+  },
+
+  "Resources": {
+
+    "DynamoDBTable": {
+        "Type": "AWS::DynamoDB::Table",
+        "Properties": {
+          "AttributeDefinitions": [
+            {
+              "AttributeName": "feedbackScore",
+              "AttributeType": "S"
+            }
+          ],
+          "KeySchema": [
+            {
+              "AttributeName": "feedbackScore",
+              "KeyType": "HASH"
+            }
+          ],
+          "ProvisionedThroughput": {
+            "ReadCapacityUnits": {
+              "Ref": "FeedbackTableRead"
+            },
+            "WriteCapacityUnits": {
+              "Ref": "FeedbackTableWrite"
+            }
+          },
+          "TableName": "Feedback2"
+        }
+    },
+
+    "DynamoDBAggregatesTable": {
+        "Type": "AWS::DynamoDB::Table",
+        "Properties": {
+          "AttributeDefinitions": [
+            {
+              "AttributeName": "feedbackScore",
+              "AttributeType": "S"
+            }
+          ],
+          "KeySchema": [
+            {
+              "AttributeName": "feedbackScore",
+              "KeyType": "HASH"
+            }
+          ],
+          "ProvisionedThroughput": {
+            "ReadCapacityUnits": {
+              "Ref": "AggregatesTableRead"
+            },
+            "WriteCapacityUnits": {
+              "Ref": "AggregatesTableWrite"
+            }
+          },
+          "TableName": "FeedbackAggregates2"
+        }
+    }
+  }
+}

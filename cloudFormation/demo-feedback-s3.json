@@ -1,0 +1,39 @@
+{ 
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  "Parameters": {
+    "S3BucketName": {
+      "Description": "S3 bucket in which the static app will reside",
+      "Type": "String",
+      "MinLength": "3",
+      "MaxLength": "63",
+      "Default": "demo-feedback2"
+    }
+  },
+  "Resources" : {
+    "S3Bucket" : {
+      "Type" : "AWS::S3::Bucket",
+      "Properties" : {
+        "AccessControl" : "PublicRead",
+        "BucketName": {
+          "Ref": "S3BucketName"
+        },
+        "WebsiteConfiguration" : {
+          "IndexDocument" : "index.html",
+          "ErrorDocument" : "error.html"
+        }
+      },
+      "DeletionPolicy" : "Delete"
+    }
+  },
+
+  "Outputs" : {
+    "WebsiteURL" : {
+      "Value" : { "Fn::GetAtt" : [ "S3Bucket", "WebsiteURL" ] },
+      "Description" : "URL for website hosted on S3"
+    },
+    "S3BucketSecureURL" : {
+      "Value" : { "Fn::Join" : [ "", [ "https://", { "Fn::GetAtt" : [ "S3Bucket", "DomainName" ] } ] ] },
+      "Description" : "Name of S3 bucket to hold website content"
+    }
+  }
+}

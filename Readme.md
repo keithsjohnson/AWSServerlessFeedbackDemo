@@ -122,3 +122,8 @@ Reference
 ---------
 AWS Labs Project
 https://github.com/keithsjohnson/lambda-refarch-webapp
+
+https://github.com/awslabs/lambda-apigateway-twilio-tutorial
+
+https://github.com/awslabs/lambda-refarch-fileprocessing
+
