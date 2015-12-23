@@ -23,9 +23,31 @@
         }
       },
       "DeletionPolicy" : "Delete"
+    },
+    "FeedbackBucketPolicy" : {
+      "Type" : "AWS::S3::BucketPolicy",
+      "Properties" : {
+        "PolicyDocument" : {
+          "Id" : "S3BucketPolicy",
+          "Version": "2012-10-17",
+          "Statement": [
+              {
+                "Sid": "PublicReadForGetBucketObjects",
+                "Effect": "Allow",
+                "Principal": {
+                    "AWS": "*"
+                },
+                "Action": "s3:GetObject",
+                "Resource" : { "Fn::Join" : [
+                    "", [ "arn:aws:s3:::", { "Ref" : "S3Bucket" } , "/index.html" ]
+                ] }
+              }
+          ]
+      },
+      "Bucket" : { "Ref" : "S3Bucket" }
+      }
     }
   },
-
   "Outputs" : {
     "WebsiteURL" : {
       "Value" : { "Fn::GetAtt" : [ "S3Bucket", "WebsiteURL" ] },
