@@ -1,0 +1,88 @@
+{ 
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  "Parameters": {
+    "DemoFeedbackLambdaS3Bucket" : {
+        "Description" : "Name of S3 bucket where static site and Lambda function packages are stored.",
+        "Type" : "String",
+        "Default" : "demo-feedback-code"
+    },
+    "FeedbackLambdaCodeS3Key" : {
+        "Description" : "",
+        "Type" : "String",
+        "Default" : "feedback-lambda.zip"
+    }
+  },
+  "Resources" : {
+    "FeedbackLambda2": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "DemoFeedbackLambdaS3Bucket"
+          },
+          "S3Key": {
+              "Ref": "FeedbackLambdaCodeS3Key"
+          }
+        },
+        "Runtime": "nodejs",
+        "Description": "Adds Feedback to DynamoDB",
+        "Handler": "app.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "LambdaExecDynamoRole",
+            "Arn"
+          ]
+        },
+        "Timeout": "5"
+      }
+    },
+    "LambdaExecDynamoRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "lambda_exec_role_voteapp",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": [
+                    "arn:aws:logs:*:*:*"
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:GetItem",
+                    "dynamodb:PutItem",
+                    "dynamodb:Query",
+                    "dynamodb:UpdateItem"
+                  ],
+                  "Resource": "*"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}
