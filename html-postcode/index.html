@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Show Postcode Location</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+	<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.css">
+    <script type="text/javascript" src= "https://code.jquery.com/jquery-2.1.4.js" ></script>
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+    </style>
+    <script type="text/javascript">
+        
+        function setConnected(connected) {
+            document.getElementById('map-canvas').style.visibility = connected ? 'visible' : 'hidden';
+            initialize();
+        }
+        
+        function getAndShowAddress() {
+        	
+        	var postcode = document.getElementById("postcodeTextBox").value;
+        	
+        	var url = "https://si961jusz3.execute-api.eu-west-1.amazonaws.com/postcode?postcode="+postcode;
+            $.getJSON(url,
+                function(data){
+            	console.log(data);
+            	$(data).each(function(idx, obj){
+                      showAddress(obj, postcode);
+                	});
+            	});
+        }
+        
+        function showAddress(jsonAddress, postcode) {
+            console.log('showAddress: ' + postcode);
+            addAddressMarker(jsonAddress, postcode);
+        }
+
+        var map
+        function initialize() {
+
+            var myOptions = {
+                         center: new google.maps.LatLng(54, -2),
+                         zoom: 6,
+                         mapTypeId: google.maps.MapTypeId.ROADMAP
+                         };
+
+            map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+            
+        }
+        
+        function addAddressMarker(jsonAddress, postcode) {
+        	var langLat = new google.maps.LatLng(jsonAddress.Item.Latitude.S, jsonAddress.Item.Longitude.S, true);
+            var marker = new google.maps.Marker({map: map, position: langLat, title: postcode});
+        }
+     </script>
+</head>
+<body onLoad="setConnected(true);">
+<div>
+  Postcode:<input type="text" id="postcodeTextBox" name="postcodeTextBox" value="ST7 2YB">
+  <button id="showPostcode" onclick="getAndShowAddress();">show postcode</button>
+</div>
+<div id="map-canvas"></div>
+</body>
+</html>
