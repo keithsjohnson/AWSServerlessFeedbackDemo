@@ -127,3 +127,19 @@ https://github.com/awslabs/lambda-apigateway-twilio-tutorial
 
 https://github.com/awslabs/lambda-refarch-fileprocessing
 
+Creating Lambda Zip Files
+-------------------------
+See: https://docs.aws.amazon.com/lambda/latest/dg/nodejs-create-deployment-pkg.html
+
+Install nodejs and npm from https://nodejs.org/en/download/
+
+cd C:\Users\Keith\git\AWSServerlessFeedbackDemo\lambda-functions\feedback-lambda
+npm install async
+
+cd C:\Users\Keith\git\AWSServerlessFeedbackDemo\lambda-functions\feedback-aggregates-lambda
+npm install async
+
+cd C:\Users\Keith\git\AWSServerlessFeedbackDemo\lambda-functions\feedback-aggregates-scan-all-lambda
+npm install async
+
+

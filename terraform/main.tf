@@ -16,5 +16,6 @@ module "dynamodb" {
 module "lambda" {
 	source = "./lambda"
 	lambda_role_arn = "${module.role.feedback_lambda_role_arn}"
+	aggregates_table_arn = "${module.dynamodb.feedback_aggregates_table_arn}"
 }
 
