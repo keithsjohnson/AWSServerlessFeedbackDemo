@@ -20,3 +20,9 @@ module "lambda" {
 	aggregates_table_stream_arn = "${module.dynamodb.feedback_aggregates_table_stream_arn}"
 }
 
+# Create API Gateway
+module "apigateway" {
+	source = "./apigateway"
+	aggregates_lambda_function_arn = "${module.lambda.feedback_aggregates_lambda_function_arn}"
+	aggregates_aggregates_scan_all_lambda_function_arn = "${module.lambda.feedback_aggregates_aggregates_scan_all_lambda_function_arn}"
+}
