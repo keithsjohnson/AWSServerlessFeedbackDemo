@@ -142,4 +142,11 @@ npm install async
 cd C:\Users\Keith\git\AWSServerlessFeedbackDemo\lambda-functions\feedback-aggregates-scan-all-lambda
 npm install async
 
+Terraform Links
+---------------
+AWS Modules Link
+https://www.terraform.io/docs/providers/aws/index.html
+
+Terraform GitHub Community Modules Link
+https://github.com/terraform-community-modules
 

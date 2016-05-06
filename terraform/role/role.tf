@@ -7,7 +7,8 @@ resource "aws_iam_role" "feedback-lambda-role" {
     {
       "Action": "sts:AssumeRole",
       "Principal": {
-        "Service": "lambda.amazonaws.com"
+        "Service": ["apigateway.amazonaws.com",
+                    "lambda.amazonaws.com"]
       },
       "Effect": "Allow",
       "Sid": ""
@@ -17,35 +18,100 @@ resource "aws_iam_role" "feedback-lambda-role" {
 EOF
 }
 
-resource "aws_iam_policy_attachment" "feedback1" {
-    name = "feedback-attachment"
+resource "aws_iam_role" "feedback-apigateway-role" {
+    name = "feedback-apigateway-role"
+    assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": ["apigateway.amazonaws.com",
+                    "lambda.amazonaws.com"]
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_policy_attachment" "feedback-lambda-1" {
+    name = "feedback-attachment-lambda-1"
     policy_arn = "arn:aws:iam::aws:policy/AWSLambdaFullAccess"
     roles = ["${aws_iam_role.feedback-lambda-role.name}"]
 }
 
-resource "aws_iam_policy_attachment" "feedback2" {
-    name = "feedback-attachment"
+resource "aws_iam_policy_attachment" "feedback-lambda-2" {
+    name = "feedback-attachment-lambda-2"
     policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
     roles = ["${aws_iam_role.feedback-lambda-role.name}"]
 }
 
-resource "aws_iam_policy_attachment" "feedback3" {
-    name = "feedback-attachment"
+resource "aws_iam_policy_attachment" "feedback-lambda-3" {
+    name = "feedback-attachment-lambda-3"
     policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
     roles = ["${aws_iam_role.feedback-lambda-role.name}"]
 }
 
-resource "aws_iam_policy_attachment" "feedback4" {
-    name = "feedback-attachment"
+resource "aws_iam_policy_attachment" "feedback-lambda-4" {
+    name = "feedback-attachment-lambda-4"
     policy_arn = "arn:aws:iam::aws:policy/AmazonSQSFullAccess"
     roles = ["${aws_iam_role.feedback-lambda-role.name}"]
 }
 
-resource "aws_iam_policy_attachment" "feedback5" {
-    name = "feedback-attachment"
+resource "aws_iam_policy_attachment" "feedback-lambda-5" {
+    name = "feedback-attachment-lambda-5"
     policy_arn = "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
     roles = ["${aws_iam_role.feedback-lambda-role.name}"]
 }
+
+resource "aws_iam_policy_attachment" "feedback-lambda-6" {
+    name = "feedback-attachment-lambda-6"
+    policy_arn = "arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess"
+    roles = ["${aws_iam_role.feedback-lambda-role.name}"]
+}
+
+
+resource "aws_iam_policy_attachment" "feedback-apigateway-1" {
+    name = "feedback-attachment-apigateway-1"
+    policy_arn = "arn:aws:iam::aws:policy/AWSLambdaFullAccess"
+    roles = ["${aws_iam_role.feedback-apigateway-role.name}"]
+}
+
+resource "aws_iam_policy_attachment" "feedback-apigateway-2" {
+    name = "feedback-attachment-apigateway-2"
+    policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+    roles = ["${aws_iam_role.feedback-apigateway-role.name}"]
+}
+
+resource "aws_iam_policy_attachment" "feedback-apigateway-3" {
+    name = "feedback-attachment-apigateway-3"
+    policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
+    roles = ["${aws_iam_role.feedback-apigateway-role.name}"]
+}
+
+resource "aws_iam_policy_attachment" "feedback-apigateway-4" {
+    name = "feedback-attachment-apigateway-4"
+    policy_arn = "arn:aws:iam::aws:policy/AmazonSQSFullAccess"
+    roles = ["${aws_iam_role.feedback-apigateway-role.name}"]
+}
+
+resource "aws_iam_policy_attachment" "feedback-apigateway-5" {
+    name = "feedback-attachment-apigateway-5"
+    policy_arn = "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
+    roles = ["${aws_iam_role.feedback-apigateway-role.name}"]
+}
+
+resource "aws_iam_policy_attachment" "feedback-apigateway-6" {
+    name = "feedback-attachment-apigateway-6"
+    policy_arn = "arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess"
+    roles = ["${aws_iam_role.feedback-apigateway-role.name}"]
+}
+
+
 
 
 #resource "aws_iam_policy" "foo" {

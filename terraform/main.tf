@@ -25,4 +25,6 @@ module "apigateway" {
 	source = "./apigateway"
 	aggregates_lambda_function_arn = "${module.lambda.feedback_aggregates_lambda_function_arn}"
 	aggregates_aggregates_scan_all_lambda_function_arn = "${module.lambda.feedback_aggregates_aggregates_scan_all_lambda_function_arn}"
+	lambda_role_arn = "${module.role.feedback_lambda_role_arn}"
+	apigateway_role_arn = "${module.role.feedback_apigateway_role_arn}"
 }
