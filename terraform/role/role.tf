@@ -38,80 +38,132 @@ resource "aws_iam_role" "feedback-apigateway-role" {
 EOF
 }
 
-resource "aws_iam_policy_attachment" "feedback-lambda-1" {
-    name = "feedback-attachment-lambda-1"
-    policy_arn = "arn:aws:iam::aws:policy/AWSLambdaFullAccess"
-    roles = ["${aws_iam_role.feedback-lambda-role.name}"]
+resource "aws_iam_role_policy" "feedback-lambda-role-inline-policy" {
+    name = "feedback-lambda-role-inline-policy"
+    role = "${aws_iam_role.feedback-lambda-role.id}"
+    policy = <<EOF
+{
+  "Version":"2012-10-17",
+  "Statement":[
+    {"Resource": ["arn:aws:logs:*:*:*"],
+     "Action": ["logs:CreateLogGroup","logs:CreateLogStream","logs:PutLogEvents"],
+     "Effect": "Allow"
+    },
+    {"Resource":"*",
+     "Action":["lambda:*", "dynamodb:*"],
+     "Effect":"Allow"
+    }
+   ]
+}
+EOF
 }
 
-resource "aws_iam_policy_attachment" "feedback-lambda-2" {
-    name = "feedback-attachment-lambda-2"
-    policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-    roles = ["${aws_iam_role.feedback-lambda-role.name}"]
+resource "aws_iam_role_policy" "feedback-apigateway-role-inline-policy" {
+    name = "feedback-apigateway-role-inline-policy"
+    role = "${aws_iam_role.feedback-apigateway-role.id}"
+    policy = <<EOF
+{
+  "Version":"2012-10-17",
+  "Statement":[
+    {"Resource": ["arn:aws:logs:*:*:*"],
+     "Action": ["logs:CreateLogGroup","logs:CreateLogStream","logs:PutLogEvents"],
+     "Effect": "Allow"
+    },
+    {"Resource":"*",
+     "Action":["lambda:*", "dynamodb:*"],
+     "Effect":"Allow"
+    }
+   ]
+}
+EOF
 }
 
-resource "aws_iam_policy_attachment" "feedback-lambda-3" {
-    name = "feedback-attachment-lambda-3"
-    policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
-    roles = ["${aws_iam_role.feedback-lambda-role.name}"]
-}
+#resource "aws_iam_policy_attachment" "feedback-lambda-1" {
+#    name = "feedback-attachment-lambda-1"
+#    policy_arn = "arn:aws:iam::aws:policy/AWSLambdaFullAccess"
+#    roles = ["${aws_iam_role.feedback-lambda-role.name}"]
+#}
 
-resource "aws_iam_policy_attachment" "feedback-lambda-4" {
-    name = "feedback-attachment-lambda-4"
-    policy_arn = "arn:aws:iam::aws:policy/AmazonSQSFullAccess"
-    roles = ["${aws_iam_role.feedback-lambda-role.name}"]
-}
+#resource "aws_iam_policy_attachment" "feedback-lambda-2" {
+#    name = "feedback-attachment-lambda-2"
+#    policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+#    roles = ["${aws_iam_role.feedback-lambda-role.name}"]
+#}
 
-resource "aws_iam_policy_attachment" "feedback-lambda-5" {
-    name = "feedback-attachment-lambda-5"
-    policy_arn = "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
-    roles = ["${aws_iam_role.feedback-lambda-role.name}"]
-}
+#resource "aws_iam_policy_attachment" "feedback-lambda-3" {
+#    name = "feedback-attachment-lambda-3"
+#    policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
+#    roles = ["${aws_iam_role.feedback-lambda-role.name}"]
+#}
 
-resource "aws_iam_policy_attachment" "feedback-lambda-6" {
-    name = "feedback-attachment-lambda-6"
-    policy_arn = "arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess"
-    roles = ["${aws_iam_role.feedback-lambda-role.name}"]
-}
+#resource "aws_iam_policy_attachment" "feedback-lambda-4" {
+#    name = "feedback-attachment-lambda-4"
+#    policy_arn = "arn:aws:iam::aws:policy/AmazonSQSFullAccess"
+#    roles = ["${aws_iam_role.feedback-lambda-role.name}"]
+#}
 
+#resource "aws_iam_policy_attachment" "feedback-lambda-5" {
+#    name = "feedback-attachment-lambda-5"
+#    policy_arn = "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
+#    roles = ["${aws_iam_role.feedback-lambda-role.name}"]
+#}
 
-resource "aws_iam_policy_attachment" "feedback-apigateway-1" {
-    name = "feedback-attachment-apigateway-1"
-    policy_arn = "arn:aws:iam::aws:policy/AWSLambdaFullAccess"
-    roles = ["${aws_iam_role.feedback-apigateway-role.name}"]
-}
-
-resource "aws_iam_policy_attachment" "feedback-apigateway-2" {
-    name = "feedback-attachment-apigateway-2"
-    policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-    roles = ["${aws_iam_role.feedback-apigateway-role.name}"]
-}
-
-resource "aws_iam_policy_attachment" "feedback-apigateway-3" {
-    name = "feedback-attachment-apigateway-3"
-    policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
-    roles = ["${aws_iam_role.feedback-apigateway-role.name}"]
-}
-
-resource "aws_iam_policy_attachment" "feedback-apigateway-4" {
-    name = "feedback-attachment-apigateway-4"
-    policy_arn = "arn:aws:iam::aws:policy/AmazonSQSFullAccess"
-    roles = ["${aws_iam_role.feedback-apigateway-role.name}"]
-}
-
-resource "aws_iam_policy_attachment" "feedback-apigateway-5" {
-    name = "feedback-attachment-apigateway-5"
-    policy_arn = "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
-    roles = ["${aws_iam_role.feedback-apigateway-role.name}"]
-}
-
-resource "aws_iam_policy_attachment" "feedback-apigateway-6" {
-    name = "feedback-attachment-apigateway-6"
-    policy_arn = "arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess"
-    roles = ["${aws_iam_role.feedback-apigateway-role.name}"]
-}
+#resource "aws_iam_policy_attachment" "feedback-lambda-6" {
+#    name = "feedback-attachment-lambda-6"
+#    policy_arn = "arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess"
+#    roles = ["${aws_iam_role.feedback-lambda-role.name}"]
+#}
 
 
+#resource "aws_iam_policy_attachment" "feedback-apigateway-1" {
+#    name = "feedback-attachment-apigateway-1"
+#    policy_arn = "arn:aws:iam::aws:policy/AWSLambdaFullAccess"
+#    roles = ["${aws_iam_role.feedback-apigateway-role.name}"]
+#}
+
+#resource "aws_iam_policy_attachment" "feedback-apigateway-2" {
+#    name = "feedback-attachment-apigateway-2"
+#    policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+#    roles = ["${aws_iam_role.feedback-apigateway-role.name}"]
+#}
+
+#resource "aws_iam_policy_attachment" "feedback-apigateway-3" {
+#    name = "feedback-attachment-apigateway-3"
+#    policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
+#    roles = ["${aws_iam_role.feedback-apigateway-role.name}"]
+#}
+
+#resource "aws_iam_policy_attachment" "feedback-apigateway-4" {
+#    name = "feedback-attachment-apigateway-4"
+#    policy_arn = "arn:aws:iam::aws:policy/AmazonSQSFullAccess"
+#    roles = ["${aws_iam_role.feedback-apigateway-role.name}"]
+#}
+
+#resource "aws_iam_policy_attachment" "feedback-apigateway-5" {
+#    name = "feedback-attachment-apigateway-5"
+#    policy_arn = "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
+#    roles = ["${aws_iam_role.feedback-apigateway-role.name}"]
+#}
+
+#resource "aws_iam_policy_attachment" "feedback-apigateway-6" {
+#    name = "feedback-attachment-apigateway-6"
+#    policy_arn = "arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess"
+#    roles = ["${aws_iam_role.feedback-apigateway-role.name}"]
+#}
+
+#{
+#  "Version":"2012-10-17",
+#  "Statement":[
+#    {"Resource": ["arn:aws:logs:*:*:*"],
+#     "Action": ["logs:CreateLogGroup","logs:CreateLogStream","logs:PutLogEvents"],
+#     "Effect": "Allow"
+#    },
+#    {"Resource":"*",
+#     "Action":["dynamodb:GetItem","dynamodb:PutItem","dynamodb:Query","dynamodb:UpdateItem"],
+#     "Effect":"Allow"
+#    }
+#   ]
+#}
 
 
 #resource "aws_iam_policy" "foo" {
