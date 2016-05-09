@@ -86,18 +86,18 @@ resource "aws_api_gateway_integration" "FeedbackAggregatesScanAllLambda3" {
   credentials = "${var.apigateway_role_arn}"
 }
 
-resource "aws_api_gateway_method_response" "FeedbackAggregatesScanAllLambda3" {
+resource "aws_api_gateway_method_response" "FeedbackAggregatesScanAllLambda3MethodResponse" {
   rest_api_id = "${aws_api_gateway_rest_api.FeedbackAPI3.id}"
   resource_id = "${aws_api_gateway_resource.FeedbackTotals.id}"
   http_method = "${aws_api_gateway_method.FeedbackAggregatesScanAllLambda3.http_method}"
   status_code = "200"
 }
 
-resource "aws_api_gateway_integration_response" "FeedbackAggregatesScanAllLambda3" {
+resource "aws_api_gateway_integration_response" "FeedbackAggregatesScanAllLambda3IntegrationResponse" {
   rest_api_id = "${aws_api_gateway_rest_api.FeedbackAPI3.id}"
   resource_id = "${aws_api_gateway_resource.FeedbackTotals.id}"
   http_method = "${aws_api_gateway_method.FeedbackAggregatesScanAllLambda3.http_method}"
-  status_code = "${aws_api_gateway_method_response.FeedbackAggregatesScanAllLambda3.status_code}"
+  status_code = "${aws_api_gateway_method_response.FeedbackAggregatesScanAllLambda3MethodResponse.status_code}"
 }
 
 resource "aws_api_gateway_deployment" "Feedback3Deployment" {

@@ -46,11 +46,11 @@ resource "aws_iam_role_policy" "feedback-lambda-role-inline-policy" {
   "Version":"2012-10-17",
   "Statement":[
     {"Resource": ["arn:aws:logs:*:*:*"],
-     "Action": ["logs:CreateLogGroup","logs:CreateLogStream","logs:PutLogEvents"],
+     "Action": ["logs:*"],
      "Effect": "Allow"
     },
     {"Resource":"*",
-     "Action":["lambda:*", "dynamodb:*"],
+     "Action":["lambda:*", "dynamodb:*", "cloudwatch:*"],
      "Effect":"Allow"
     }
    ]
@@ -66,11 +66,11 @@ resource "aws_iam_role_policy" "feedback-apigateway-role-inline-policy" {
   "Version":"2012-10-17",
   "Statement":[
     {"Resource": ["arn:aws:logs:*:*:*"],
-     "Action": ["logs:CreateLogGroup","logs:CreateLogStream","logs:PutLogEvents"],
+     "Action": ["logs:*"],
      "Effect": "Allow"
     },
     {"Resource":"*",
-     "Action":["lambda:*", "dynamodb:*"],
+     "Action":["lambda:*", "dynamodb:*", "cloudwatch:*"],
      "Effect":"Allow"
     }
    ]
