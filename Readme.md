@@ -4,6 +4,7 @@ AWS Serverless Feedback Demo
 Introduction
 ------------
 AWS Demo using S3, API Gateway, NodeJS, Lambda and DynamoDB
+Also uses Terraform to Create the web site on AWS
 
 This demo shows how to host a Dynamic Web Site on static AWS Simple Storage Service (S3) using jQuery .getJSON function to call API Gateway.
 The API Gateway uses Lambda functions written on node.js to store feedback in DynamoDB.
@@ -17,7 +18,8 @@ Keith Johnson
 
 URL
 ---
-http://demo-feedback.s3-website-eu-west-1.amazonaws.com/
+Manual: http://demo-feedback.s3-website-eu-west-1.amazonaws.com/
+Terraform: http://demo-feedback3.s3-website-eu-west-1.amazonaws.com/
 
 Status
 ------
@@ -25,9 +27,9 @@ In Progress
 
 To Do
 -----
-1. Create AWS CloudFormation template to create and deploy application automatically.
+1. The API Gateway require Enables CORS to prevent access control problems.
 
-2. Write up project from Notes below but using CloudFormation instead of AWS Console.
+2. Create Lambda Zip Files using gradle instead of manual process. 
 
 Notes (Below are Notes still to be written up)
 ----------------------------------------------
