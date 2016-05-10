@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+    <head>
+        <meta name="generator" content="HTML Tidy, see www.w3.org">
+        <title>AWS Serverless Code: Feedback Demo</title>
+	    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.css" >
+        <script type="text/javascript" src= "https://code.jquery.com/jquery-2.1.4.js" ></script>
+        <script type="text/javascript" src= "https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.js" ></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+
+	    <link rel="shortcut icon" href="https://code.jquery.com/favicon.ico">
+	    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+	    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+
+        <script type="text/javascript">
+            function getPieData(){
+				var pieData = [
+					{
+						value: 10,
+						color:"#F7464A",
+						highlight: "#FF5A5E",
+						label: "excellent"
+					},
+					{
+						value: 20,
+						color: "#46BFBD",
+						highlight: "#5AD3D1",
+						label: "good"
+					},
+					{
+						value: 30,
+						color: "#FDB45C",
+						highlight: "#FFC870",
+						label: "ok"
+					},
+					{
+						value: 40,
+						color: "#949FB1",
+						highlight: "#A8B3C5",
+						label: "bad"
+					},
+					{
+						value: 50,
+						color: "#4D5360",
+						highlight: "#616774",
+						label: "ugly"
+					}
+	
+				];
+				return pieData;
+            };
+
+            $(function(){
+            	feedbackTotals();
+            });
+            
+            function feedback(score, feedback){
+            	//var url = "https://miir0io9fi.execute-api.eu-west-1.amazonaws.com/feedback3/FeedbackAPI3?score="+score+"&feedback="+feedback;
+                //$.getJSON(url,
+                //    function(data){
+                //	$(data).each(function(idx, obj){
+                //    	});
+                //	});
+                
+                var uri = "https://miir0io9fi.execute-api.eu-west-1.amazonaws.com/feedback3/FeedbackAPI3";
+    	        console.log("uri: " + uri);
+    	        var jsonDataPost = "{\"score\": "+score+", \"feedback\": \"" + feedback + "\"}";
+    	        var jqxhr = $.ajax( {method: "POST", url: uri, data: jsonDataPost} ) 
+    	          .done(function(response) {
+    		        console.log( "success: " + response );
+    	          })
+    	          .fail(function(response) {
+    	        	  console.log( "error " + response );
+    	          }
+    	        );
+
+                setTimeout(function(){
+	                clearAndUpdateFeedbackTotalsAfterUpdateAfterTimeout();
+            	}, 3000);	
+           	};
+
+			function clearAndUpdateFeedbackTotalsAfterUpdateAfterTimeout() {
+	                deleteRow("feedbackHeader");
+	        		deleteRow("none");
+	            	deleteRow("excellent");
+	            	deleteRow("good");
+	            	deleteRow("ok");
+	            	deleteRow("bad");
+	            	deleteRow("ugly");
+	            	
+	            	var feedbackHeaderRow = "<tr><th>Feedback</th><th>Score</th></tr>";
+	                document.getElementById("feedbackScoresTable").insertRow(-1).innerHTML = feedbackHeaderRow;
+	               	feedbackTotals();
+			};
+            
+            function feedbackTotals() {
+				var pieDataReturn = getPieData();
+                $.getJSON("https://miir0io9fi.execute-api.eu-west-1.amazonaws.com/feedback3/FeedbackTotals", 
+                        function(data){
+                    	$(data).each(function(idx, obj){ 
+                            $(obj).each(function(key, value){
+                            	var scores = '<tr id="' + value.feedbackScore.S + '"><th> ' + value.feedbackScore.S
+    							+ ' </th> <td> ' + value.Scores.N
+    							+ ' </td></tr>';
+    							document.getElementById("feedbackScoresTable").insertRow(-1).innerHTML = scores;
+    							console.log(scores);
+								for(var i = 0; i < pieDataReturn.length; i++) {
+									var label = pieDataReturn[i].label;
+									if (label === value.feedbackScore.S) {
+										var score = Number(value.Scores.N);
+										pieDataReturn[i].value = score;
+									};
+								};
+                            });
+                        });
+                        if ( typeof query !== 'undefined' && query ) {
+            				window.myPie.destroy();
+                        }
+        				var ctx = document.getElementById("chart-area").getContext("2d");
+        				window.myPie = new Chart(ctx).Pie(pieDataReturn);
+                    }); 
+                
+            }
+            
+        	function deleteRow(rowid) {   
+        	    console.log("deleteRow: " + rowid);
+        	    document.getElementById("feedbackScoresTable").deleteRow(rowid);
+        	}
+        	
+		</script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+    </head>
+    <body>
+    <H1>AWS Serverless Code: Feedback Demo</H1>
+    <H2>Using AWS Services: S3, API Gateway, Node.js, Lambda, DynamoDB</H2>
+	<form>
+    	<fieldset data-role="controlgroup" data-type="horizontal">
+        	<legend>Select Feedback:</legend>
+        	<input type="radio" name="radio-choice-h-2" id="radio-choice-h-2a" value="5" onClick = "feedback('5', 'excellent');">
+        	<label for="radio-choice-h-2a">excellent</label>
+        	<input type="radio" name="radio-choice-h-2" id="radio-choice-h-2b" value="4" onClick = "feedback('4', 'good');">
+        	<label for="radio-choice-h-2b">good</label>
+        	<input type="radio" name="radio-choice-h-2" id="radio-choice-h-2c" value="3" onClick = "feedback('3', 'ok');">
+        	<label for="radio-choice-h-2c">ok</label>
+        	<input type="radio" name="radio-choice-h-2" id="radio-choice-h-2d" value="2" onClick = "feedback('2', 'bad');">
+        	<label for="radio-choice-h-2d">bad</label>
+        	<input type="radio" name="radio-choice-h-2" id="radio-choice-h-2e" value="1" onClick = "feedback('1', 'ugly');">
+        	<label for="radio-choice-h-2e">ugly</label>
+    	</fieldset>
+	</form>
+
+	<table data-role="table" id="feedbackScoresTable" data-mode="column" data-column-btn-theme="b" class="table-stroke">
+    	<thead>
+        	<tr id="feedbackHeader">
+            	<th>Feedback</th>
+            	<th>Score</th>
+        	</tr>
+    	</thead>
+    	<tbody>
+    	</tbody>
+	</table>
+	<br />
+		<div id="canvas-holder">
+			<canvas id="chart-area" width="300" height="300"/>
+		</div>
+    </body>
+</html>

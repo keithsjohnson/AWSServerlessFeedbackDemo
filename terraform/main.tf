@@ -28,3 +28,8 @@ module "apigateway" {
 	lambda_role_arn = "${module.role.feedback_lambda_role_arn}"
 	apigateway_role_arn = "${module.role.feedback_apigateway_role_arn}"
 }
+
+# Create S3
+module "s3" {
+	source = "./s3"
+}
