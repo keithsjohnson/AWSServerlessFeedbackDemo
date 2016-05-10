@@ -32,4 +32,5 @@ module "apigateway" {
 # Create S3
 module "s3" {
 	source = "./s3"
+	feedback_rest_api_id = "${module.apigateway.api_gateway_feedback_rest_api_id}"	
 }

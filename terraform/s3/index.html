@@ -13,6 +13,8 @@
 	    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
 
         <script type="text/javascript">
+            var restApiId = "rest_api_id";
+            
             function getPieData(){
 				var pieData = [
 					{
@@ -55,14 +57,7 @@
             });
             
             function feedback(score, feedback){
-            	//var url = "https://miir0io9fi.execute-api.eu-west-1.amazonaws.com/feedback3/FeedbackAPI3?score="+score+"&feedback="+feedback;
-                //$.getJSON(url,
-                //    function(data){
-                //	$(data).each(function(idx, obj){
-                //    	});
-                //	});
-                
-                var uri = "https://miir0io9fi.execute-api.eu-west-1.amazonaws.com/feedback3/FeedbackAPI3";
+                var uri = "https://" + restApiId + ".execute-api.eu-west-1.amazonaws.com/feedback3/FeedbackAPI3";
     	        console.log("uri: " + uri);
     	        var jsonDataPost = "{\"score\": "+score+", \"feedback\": \"" + feedback + "\"}";
     	        var jqxhr = $.ajax( {method: "POST", url: uri, data: jsonDataPost} ) 
@@ -95,7 +90,7 @@
             
             function feedbackTotals() {
 				var pieDataReturn = getPieData();
-                $.getJSON("https://miir0io9fi.execute-api.eu-west-1.amazonaws.com/feedback3/FeedbackTotals", 
+                $.getJSON("https://" + restApiId + ".execute-api.eu-west-1.amazonaws.com/feedback3/FeedbackTotals", 
                         function(data){
                     	$(data).each(function(idx, obj){ 
                             $(obj).each(function(key, value){
@@ -124,7 +119,9 @@
             
         	function deleteRow(rowid) {   
         	    console.log("deleteRow: " + rowid);
-        	    document.getElementById("feedbackScoresTable").deleteRow(rowid);
+        	    if (document.getElementById("feedbackScoresTable").rows.length > 0) {
+        	        document.getElementById("feedbackScoresTable").deleteRow(rowid);
+        	    }
         	}
         	
 		</script>
@@ -133,7 +130,7 @@
     </head>
     <body>
     <H1>AWS Serverless Code: Feedback Demo</H1>
-    <H2>Using AWS Services: S3, API Gateway, Node.js, Lambda, DynamoDB</H2>
+    <H2>Using AWS Services: S3, API Gateway, Node.js, Lambda, DynamoDB. Created with Terraform (almost).</H2>
 	<form>
     	<fieldset data-role="controlgroup" data-type="horizontal">
         	<legend>Select Feedback:</legend>

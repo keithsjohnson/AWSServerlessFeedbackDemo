@@ -24,9 +24,7 @@ EOF
 resource "aws_s3_bucket_object" "feedback3-index-html" {
   key        = "index.html"
   bucket     = "${aws_s3_bucket.feedback3-bucket.bucket}"
-  source     = "./s3/index.html"
+  content     = "${replace(file("./s3/index.html"), "rest_api_id", var.feedback_rest_api_id)}"
   content_type = "text/html"
   etag = "${base64sha256(file("./s3/index.html"))}"
-#  source     = "../html/index.html"
-#  kms_key_id = "${aws_kms_key.examplekms.arn}"
 }
