@@ -1,0 +1,66 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+}
+ 
+//sourceCompatibility = 1.8
+//targetCompatibility = 1.8
+ 
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+task build() << {
+}
+
+task clean() << {
+}
+
+task zipFeedbackLambda(type:Zip) {
+    from ('lambda-functions/feedback-lambda/') {
+        include 'feedback-lambda.js'
+    }
+    from ('nodejs/') {
+        include '**/*.*'
+    }
+    destinationDir file('build')
+    archiveName 'feedback-lambda.zip'
+}
+
+task zipFeedbackAggregatesLambda(type:Zip) {
+    from ('lambda-functions/feedback-aggregates-lambda/') {
+        include 'feedback-aggregates-lambda.js'
+    }
+    from ('nodejs/') {
+        include '**/*.*'
+    }
+    destinationDir file('build')
+    archiveName 'feedback-aggregates-lambda.zip'
+}
+
+task zipFeedbackAggregatesScanAllLambda(type:Zip) {
+    from ('lambda-functions/feedback-aggregates-scan-all-lambda/') {
+        include 'feedback-aggregates-scan-all-lambda.js'
+    }
+    from ('nodejs/') {
+        include '**/*.*'
+    }
+    destinationDir file('build')
+    archiveName 'feedback-aggregates-scan-all-lambda.zip'
+}
+
+task deleteBuildDir(type: Delete) {
+   delete 'build'
+}
+
+build.dependsOn zipFeedbackLambda
+build.dependsOn zipFeedbackAggregatesLambda
+build.dependsOn zipFeedbackAggregatesScanAllLambda
+clean.dependsOn deleteBuildDir
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.14'
+}

@@ -29,8 +29,29 @@ To Do
 -----
 1. The API Gateway require Enables CORS to prevent access control problems.
 
-2. Create Lambda Zip Files using gradle instead of manual process. 
+Technology
+----------
+Uses AWS Serverless Technology DynamoDB, Lambda, API Gateway, S3 and IAM for Roles.
+NodeJS for implementation of Lambda Functions
+HTML, Javascript, JQuery and JQuery Mobile
+Terraform for automated deployment into AWS
 
+DynamoDB
+--------
+
+Lambda
+------
+
+API Gateway
+-----------
+
+S3
+--
+
+IAM Roles
+---------
+
+ 
 Notes (Below are Notes still to be written up)
 ----------------------------------------------
 
